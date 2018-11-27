@@ -148,7 +148,7 @@ function choixAleaCarte(num) {
 
 
 
-generateBoard(50);
+generateBoard(12);
 
 
 
