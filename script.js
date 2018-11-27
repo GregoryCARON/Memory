@@ -1,91 +1,155 @@
 let carteTotales;
+let nbClick = 0;
+let carte1 = '';
+let carte2 = '';
+let carteId1;
+let carteId2;
 let cartes = [
-    'as de pique',
-    'roi de pique',
-    'dame de pique',
-    'valet de pique',
-    '10 de pique',
-    '9 de pique',
-    '8 de pique',
-    '7 de pique',
-    '6 de pique',
-    '5 de pique',
-    '4 de pique',
-    '3 de pique',
-    '2 de pique',
-    'as de coeur',
-    'roi de coeur',
-    'dame de coeur',
-    'valet de coeur',
-    '10 de coeur',
-    '9 de coeur',
-    '9 de coeur',
-    '8 de coeur',
-    '7 de coeur',
-    '6 de coeur',
-    '5 de coeur',
-    '4 de coeur',
-    '3 de coeur',
-    '2 de coeur',
-    'as de carreau',
-    'roi de carreau',
-    'dame de carreau',
-    'valet de carreau',
-    '10 de carreau',
-    '9 de carreau',
-    '8 de carreau',
-    '7 de carreau',
-    '6 de carreau',
-    '5 de carreau',
-    '4 de carreau',
-    '3 de carreau',
-    '2 de carreau',
-    'as de trefle',
-    'roi de trefle',
-    'dame de trefle',
-    'valet de trefle',
-    '10 de trefle',
-    '9 de trefle',
-    '8 de trefle',
-    '7 de trefle',
-    '6 de trefle',
-    '5 de trefle',
-    '4 de trefle',
-    '3 de trefle',
-    '2 de trefle'
+    'ace_of_spades2',
+    'king_of_spades2',
+    'queen_of_spades2',
+    'jack_of_spades2',
+    '10_of_spades',
+    '9_of_spades',
+    '8_of_spades',
+    '7_of_spades',
+    '6_of_spades',
+    '5_of_spades',
+    '4_of_spades',
+    '3_of_spades',
+    '2_of_spades',
+    'ace_of_hearts',
+    'king_of_hearts2',
+    'queen_of_hearts2',
+    'jack_of_hearts2',
+    '10_of_hearts',
+    '9_of_hearts',
+    '9_of_hearts',
+    '8_of_hearts',
+    '7_of_hearts',
+    '6_of_hearts',
+    '5_of_hearts',
+    '4_of_hearts',
+    '3_of_hearts',
+    '2_of_hearts',
+    'ace_of_diamonds',
+    'king_of_diamonds2',
+    'queen_of_diamonds2',
+    'jack_of_diamonds2',
+    '10_of_diamonds',
+    '9_of_diamonds',
+    '8_of_diamonds',
+    '7_of_diamonds',
+    '6_of_diamonds',
+    '5_of_diamonds',
+    '4_of_diamonds',
+    '3_of_diamonds',
+    '2_of_diamonds',
+    'ace_of_clubs',
+    'king_of_clubs2',
+    'queen_of_clubs2',
+    'jack_of_clubs2',
+    '10_of_clubs',
+    '9_of_clubs',
+    '8_of_clubs',
+    '7_of_clubs',
+    '6_of_clubs',
+    '5_of_clubs',
+    '4_of_clubs',
+    '3_of_clubs',
+    '2_of_clubs'
 ];
 let cartes_tirees = [];
 
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        let j = Math.floor(Math.random() * (i + 1));
+        let temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+}
+
 function generateBoard(num) {
+    shuffleArray(cartes);
     if (num > 108) {
         num = 108;
     }
     if (num % 2 !== 0) {
         alert('veillez choisir un nombre pair');
     } else {
+        choixAleaCarte(num);
         carteTotales = num;
-        for (let i = 0; i < num; i++) {
+        num = (num /2);
+        for (let i = 0; i < carteTotales; i++) {
             let divContenu = document.createElement('div');
             divContenu.className = 'carte';
             divContenu.id = 'carte' + i;
-            divContenu.style.backgroundImage = 'url("images/dos.png")';
+            divContenu.innerHTML = '<img id="img' + i + '" src="images/cartes/' + cartes_tirees[i] + '.png" visibility="hidden" height ="100px" width="100px" alt="' + cartes_tirees[i] + '">';
+            //divContenu.style.backgroundImage = 'url("images/dos.png")';
+            //divContenu.onclick = "afficher('img" + i + "')";
+
             divContenu.style.backgroundSize = 'cover';
             document.getElementById('cartes').appendChild(divContenu);
+            document.getElementById('carte' + i).addEventListener('click', function() {
+                switch (nbClick) {
+                    case 0:
+                        carte1 = card;
+                        carteId1 = 'img' + i;
+                        document.getElementById('img' + i).style.visibility = 'true';
+                        break;
+                    case 1:
+                        carte2 = card;
+                        carteId2 = 'img' + i;
+                        document.getElementById('img' + i).style.visibility = 'true';
+                        break;
+                        if (carte1 === carte2) {
+                            nbClick = 0;
+                            document.getElementById('cartes').removeChild(document.getElementById(carteId1));
+                            document.getElementById('cartes').removeChild(document.getElementById(carteId2));
+                        } else {
+                            nbClick = 0;
+                            document.getElementById(carteId1).style.visibility = 'false';
+                            document.getElementById(carteId2).style.visibility = 'false';
+                        }
+                    default:
+
+                        nbClick = 0;
+                        carteId1 = null;
+                        carteId2 = null;
+                }
+            });
         }
     }
-    alert(document.getElementById('carte1').style.backgroundImage);
+    //alert(document.getElementById('carte1').style.backgroundImage);
 }
 
-function choixAleaCarte() {
-    let rd = Math.floor(Math.random() * cartes.length);
-
-
+function choixAleaCarte(num) {
+    for (let i = 0; i < num; i++) {
+        let pioche = Math.floor(Math.random() * cartes.length);
+        let dejapioche = 0;
+        for (let a = 0; a < cartes_tirees.length; a++) {
+            dejapioche = 0;
+            console.log(cartes[pioche]);
+            console.log(cartes_tirees[a]);
+            if (cartes_tirees !== 'undefined' && cartes[pioche] === cartes_tirees[a]) {
+                dejapioche = 1
+            }
+        }
+        if (dejapioche === 0) {
+            cartes_tirees.push(cartes[pioche]);
+            cartes_tirees.push(cartes[pioche]);
+        }
+    }
+    console.log(cartes_tirees);
+    shuffleArray(cartes_tirees);
+    console.log(cartes_tirees);
 }
 
-function randomizeCard() {
-    nbCarte = carte.length;
-
-}
 
 
-generateBoard(12);
+generateBoard(50);
+
+
+
+

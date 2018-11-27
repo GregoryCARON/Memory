@@ -18,7 +18,10 @@ h1 {
 }
 .carte {
     width: 21%;
-    height: 220px;
-    background-color: blue;
+    /*height: 220px;*/
     margin: 10px;
+    text-align: center;
+}
+img {
+    height: 100%;
 }
