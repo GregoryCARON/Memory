@@ -73,6 +73,7 @@ function generateBoard(num) {
             document.getElementById('cartes').appendChild(divContenu);
         }
     }
+    alert(document.getElementById('carte1').style.backgroundImage);
 }
 
 function choixAleaCarte() {
