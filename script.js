@@ -97,7 +97,7 @@ if (num % 2 !== 0) {//CHECK EVEN NUMBER
                     if (nbClick === 0) {
                         /*if (document.getElementById('carte' + i).style.visibility === 'visible') {*/
                         nbClick++;
-                        div1 = document.getElementById('img' + i);
+                        div1 = 'carte' + i;
                         carte1 = cartes_tirees[i];
                         carteId1 = 'img' + i;
                         document.getElementById(carteId1).src = 'images/cartes/' + cartes_tirees[i] + '.png';
@@ -108,7 +108,7 @@ if (num % 2 !== 0) {//CHECK EVEN NUMBER
                         tours++;
 
                         nbClick++;
-                        div2 = document.getElementById('img' + i);
+                        div2 = 'carte' + i;
                         carte2 = cartes_tirees[i];
 
                         carteId2 = 'img' + i;
