@@ -96,12 +96,12 @@ function generateBoard(num) {
                     case 0:
                         carte1 = card;
                         carteId1 = 'img' + i;
-                        document.getElementById('img' + i).style.visibility = 'true';
+                        document.getElementById('img' + i).style.visibility = 'visible';
                         break;
                     case 1:
                         carte2 = card;
                         carteId2 = 'img' + i;
-                        document.getElementById('img' + i).style.visibility = 'true';
+                        document.getElementById('img' + i).style.visibility = 'visible';
                         break;
                         if (carte1 === carte2) {
                             nbClick = 0;
@@ -109,8 +109,8 @@ function generateBoard(num) {
                             document.getElementById('cartes').removeChild(document.getElementById(carteId2));
                         } else {
                             nbClick = 0;
-                            document.getElementById(carteId1).style.visibility = 'false';
-                            document.getElementById(carteId2).style.visibility = 'false';
+                            document.getElementById(carteId1).style.visibility = 'hidden';
+                            document.getElementById(carteId2).style.visibility = 'hidden';
                         }
                     default:
 
