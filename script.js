@@ -1,9 +1,15 @@
+//VARIABLES DECLARATIONS
 let carteTotales;
+let tours = 0;
+let pairs = 0;
 let nbClick = 0;
+let div1;
+let div2;
 let carte1 = '';
 let carte2 = '';
 let carteId1;
 let carteId2;
+let num = 12;
 let cartes = [
     'ace_of_spades2',
     'king_of_spades2',
@@ -61,6 +67,7 @@ let cartes = [
 ];
 let cartes_tirees = [];
 
+//MIX ARRAY FUNCTION
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         let j = Math.floor(Math.random() * (i + 1));
@@ -70,59 +77,81 @@ function shuffleArray(array) {
     }
 }
 
-function generateBoard(num) {
-    shuffleArray(cartes);
-    if (num > 108) {
-        num = 108;
-    }
-    if (num % 2 !== 0) {
-        alert('veillez choisir un nombre pair');
-    } else {
-        choixAleaCarte(num);
-        carteTotales = num;
-        num = (num /2);
-        for (let i = 0; i < carteTotales; i++) {
-            let divContenu = document.createElement('div');
-            divContenu.className = 'carte';
-            divContenu.id = 'carte' + i;
-            divContenu.innerHTML = '<img id="img' + i + '" src="images/cartes/' + cartes_tirees[i] + '.png" visibility="hidden" height ="100px" width="100px" alt="' + cartes_tirees[i] + '">';
-            //divContenu.style.backgroundImage = 'url("images/dos.png")';
-            //divContenu.onclick = "afficher('img" + i + "')";
-
-            divContenu.style.backgroundSize = 'cover';
-            document.getElementById('cartes').appendChild(divContenu);
-            document.getElementById('carte' + i).addEventListener('click', function() {
-                switch (nbClick) {
-                    case 0:
-                        carte1 = card;
-                        carteId1 = 'img' + i;
-                        document.getElementById('img' + i).style.visibility = 'visible';
-                        break;
-                    case 1:
-                        carte2 = card;
-                        carteId2 = 'img' + i;
-                        document.getElementById('img' + i).style.visibility = 'visible';
-                        break;
-                        if (carte1 === carte2) {
-                            nbClick = 0;
-                            document.getElementById('cartes').removeChild(document.getElementById(carteId1));
-                            document.getElementById('cartes').removeChild(document.getElementById(carteId2));
-                        } else {
-                            nbClick = 0;
-                            document.getElementById(carteId1).style.visibility = 'hidden';
-                            document.getElementById(carteId2).style.visibility = 'hidden';
-                        }
-                    default:
-
-                        nbClick = 0;
-                        carteId1 = null;
-                        carteId2 = null;
-                }
-            });
-        }
-    }
-    //alert(document.getElementById('carte1').style.backgroundImage);
+shuffleArray(cartes);
+if (num > 54) {//MAX NUMBER OF CARDS
+    num = 54;
 }
+if (num % 2 !== 0) {//CHECK EVEN NUMBER
+    alert('veillez choisir un nombre pair');
+} else {
+    choixAleaCarte(num / 2);
+    carteTotales = num;
+    for (let i = 0; i < carteTotales; i++) {
+        let divContenu = document.createElement('div');
+        divContenu.className = 'carte';
+        divContenu.id = 'carte' + i;
+        divContenu.innerHTML = '<img id="img' + i + '" src="images/dos.png" visibility="visible" width="100px" alt="' + cartes_tirees[i] + '">';
+        document.getElementById('cartes').appendChild(divContenu);
+        document.getElementById('carte' + i).addEventListener('click', function () {
+                if (nbClick < 2) {
+                    if (nbClick === 0) {
+                        /*if (document.getElementById('carte' + i).style.visibility === 'visible') {*/
+                        nbClick++;
+                        div1 = document.getElementById('img' + i);
+                        carte1 = cartes_tirees[i];
+                        carteId1 = 'img' + i;
+                        document.getElementById(carteId1).src = 'images/cartes/' + cartes_tirees[i] + '.png';
+                        /*}*/
+                    } else {
+                        console.log(tours);
+                        /*if (document.getElementById('carte' + i).style.visibility === 'visible') {*/
+                        tours++;
+
+                        nbClick++;
+                        div2 = document.getElementById('img' + i);
+                        carte2 = cartes_tirees[i];
+
+                        carteId2 = 'img' + i;
+                        document.getElementById(carteId2).src = 'images/cartes/' + cartes_tirees[i] + '.png';
+                        console.log('carte1 : ' + carte1 + ', ID : ' + carteId1);
+                        console.log('carte2 : ' + carte2 + ', ID : ' + carteId2);
+                        if (carte1 === carte2 && carte1 !== '' && carte2 !== '' && carteId1 !== carteId2) {
+                            setTimeout(function () {
+                                nbClick = 0;
+                                /*let div = document.getElementById('carte' + i);
+                                let carte = document.getElementById(carteId1);
+                                div1.removeChild(carteId1);
+                                div2.removeChild(carteId2);
+                                /*document.getElementById('cartes').removeChild(document.getElementById(carteId1));
+                                document.getElementById('cartes').removeChild(document.getElementById(carteId2));*/
+                                document.getElementById(div1).style.visibility = 'hidden';
+                                document.getElementById(div2).style.visibility = 'hidden';
+                                carte1 = null;
+                                carteId1 = null;
+                                carte2 = null;
+                                carteId2 = null;
+
+                            }, 500);
+                        } else {
+
+                            setTimeout(function () {
+                                nbClick = 0;
+                                pairs++;
+                                document.getElementById(carteId1).src = 'images/dos.png';
+                                document.getElementById(carteId2).src = 'images/dos.png';
+                                carteId1 = null;
+                                carteId2 = null;
+                            }, 500);
+                        }
+                        /*}*/
+                    }
+                }
+        });
+    }
+}
+
+//alert(document.getElementById('carte1').style.backgroundImage);
+//}
 
 function choixAleaCarte(num) {
     for (let i = 0; i < num; i++) {
@@ -130,8 +159,6 @@ function choixAleaCarte(num) {
         let dejapioche = 0;
         for (let a = 0; a < cartes_tirees.length; a++) {
             dejapioche = 0;
-            console.log(cartes[pioche]);
-            console.log(cartes_tirees[a]);
             if (cartes_tirees !== 'undefined' && cartes[pioche] === cartes_tirees[a]) {
                 dejapioche = 1
             }
@@ -141,15 +168,5 @@ function choixAleaCarte(num) {
             cartes_tirees.push(cartes[pioche]);
         }
     }
-    console.log(cartes_tirees);
     shuffleArray(cartes_tirees);
-    console.log(cartes_tirees);
 }
-
-
-
-generateBoard(12);
-
-
-
-

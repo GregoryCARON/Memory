@@ -16,6 +16,20 @@ h1 {
     flex: 1 50%;
     flex-wrap: wrap;
 }
+#entree {
+    display: flex;
+
+}
+button {
+    min-width: 70px;
+    padding: 10px;
+    height: 40px;
+    margin: 5px;
+    background: white;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+}
 .carte {
     width: 21%;
     /*height: 220px;*/
