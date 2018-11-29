@@ -1,16 +1,6 @@
 //VARIABLES DECLARATIONS
-let carteTotales;
-let tours = 0;
-let pairs = 0;
-let nbClick = 0;
-let div1;
-let div2;
-let carte1 = '';
-let carte2 = '';
-let carteId1;
-let carteId2;
-let num = 12;
-let cartes = [
+var carteTotales, tours = 0, pairs = 0, nbClick = 0, div1, div2, carte1 = '', carte2 = '', carteId1, carteId2, num = 12;
+var cartes = [
     'ace_of_spades2',
     'king_of_spades2',
     'queen_of_spades2',
@@ -65,42 +55,66 @@ let cartes = [
     '3_of_clubs',
     '2_of_clubs'
 ];
-let cartes_tirees = [];
+var cartes_tirees = [];
+
+function choixAleaCarte(num) {
+    for (var i = 0; i < num; i++) {
+        var pioche = Math.floor(Math.random() * cartes.length);
+        var dejapioche = 0;
+        for (var a = 0; a < (cartes_tirees.length - 1); a++) {
+            dejapioche = 0;
+            if (cartes_tirees !== 'undefined' && cartes[pioche] === cartes_tirees[a]) {
+                dejapioche = 1
+            }
+        }
+        if (dejapioche === 0) {
+            cartes_tirees.push(cartes[pioche]);
+            cartes_tirees.push(cartes[pioche]);
+        }
+    }
+    shuffleArray(cartes_tirees);
+}
 
 //MIX ARRAY FUNCTION
 function shuffleArray(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        let j = Math.floor(Math.random() * (i + 1));
-        let temp = array[i];
+    for (var i = array.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = array[i];
         array[i] = array[j];
         array[j] = temp;
     }
 }
 
-shuffleArray(cartes);
-if (num > 54) {//MAX NUMBER OF CARDS
-    num = 54;
-}
-if (num % 2 !== 0) {//CHECK EVEN NUMBER
-    alert('veillez choisir un nombre pair');
-} else {
-    choixAleaCarte(num / 2);
-    carteTotales = num;
-    for (let i = 0; i < carteTotales; i++) {
-        let divContenu = document.createElement('div');
-        divContenu.className = 'carte';
-        divContenu.id = 'carte' + i;
-        divContenu.innerHTML = '<img id="img' + i + '" src="images/dos.png" visibility="visible" width="100px" alt="' + cartes_tirees[i] + '">';
-        document.getElementById('cartes').appendChild(divContenu);
-        document.getElementById('carte' + i).addEventListener('click', function () {
+function jouer() {
+    shuffleArray(cartes);
+    if (num > 54) {//MAX NUMBER OF CARDS
+        num = 54;
+    }
+    if (num % 2 !== 0) {//CHECK EVEN NUMBER
+        alert('veillez choisir un nombre pair');
+    } else {
+        choixAleaCarte(num / 2);
+        carteTotales = num;
+        for (var ii = 0; ii < carteTotales; ii++) {
+            var divContenu = document.createElement('div');
+            divContenu.className = 'carte';
+            divContenu.id = 'carte' + ii;
+            divContenu.innerHTML = '<img id="img' + ii + '" src="images/dos.png" width="100px" alt="carte">'; //alt="' + cartes_tirees[i] + '">';
+            document.getElementById('cartes').appendChild(divContenu);
+            document.getElementById('carte' + ii).addEventListener('click', function () {
                 if (nbClick < 2) {
                     if (nbClick === 0) {
                         /*if (document.getElementById('carte' + i).style.visibility === 'visible') {*/
                         nbClick++;
-                        div1 = 'carte' + i;
-                        carte1 = cartes_tirees[i];
-                        carteId1 = 'img' + i;
-                        document.getElementById(carteId1).src = 'images/cartes/' + cartes_tirees[i] + '.png';
+                        div1 = 'carte' + ii;
+                        carte1 = cartes_tirees[ii];
+                        carteId1 = 'img' + ii;
+
+
+                        console.log('images/cartes/' + cartes_tirees[ii] + '.png');
+
+
+                        document.getElementById(carteId1).src = 'images/cartes/' + cartes_tirees[ii] + '.png';
                         /*}*/
                     } else {
                         console.log(tours);
@@ -108,18 +122,18 @@ if (num % 2 !== 0) {//CHECK EVEN NUMBER
                         tours++;
 
                         nbClick++;
-                        div2 = 'carte' + i;
-                        carte2 = cartes_tirees[i];
+                        div2 = 'carte' + ii;
+                        carte2 = cartes_tirees[ii];
 
-                        carteId2 = 'img' + i;
-                        document.getElementById(carteId2).src = 'images/cartes/' + cartes_tirees[i] + '.png';
+                        carteId2 = 'img' + ii;
+                        document.getElementById(carteId2).src = 'images/cartes/' + cartes_tirees[ii] + '.png';
                         console.log('carte1 : ' + carte1 + ', ID : ' + carteId1);
                         console.log('carte2 : ' + carte2 + ', ID : ' + carteId2);
                         if (carte1 === carte2 && carte1 !== '' && carte2 !== '' && carteId1 !== carteId2) {
                             setTimeout(function () {
                                 nbClick = 0;
-                                /*let div = document.getElementById('carte' + i);
-                                let carte = document.getElementById(carteId1);
+                                /*var div = document.getElementById('carte' + i);
+                                var carte = document.getElementById(carteId1);
                                 div1.removeChild(carteId1);
                                 div2.removeChild(carteId2);
                                 /*document.getElementById('cartes').removeChild(document.getElementById(carteId1));
@@ -133,40 +147,66 @@ if (num % 2 !== 0) {//CHECK EVEN NUMBER
 
                             }, 500);
                         } else {
-
+                            pairs++;
                             setTimeout(function () {
                                 nbClick = 0;
-                                pairs++;
                                 document.getElementById(carteId1).src = 'images/dos.png';
                                 document.getElementById(carteId2).src = 'images/dos.png';
                                 carteId1 = null;
                                 carteId2 = null;
+                                if ((num) === (pairs * 2)) {
+                                    document.getElementById('entree').style.display = 'none';
+                                    document.getElementById('cartes').style.display = 'none';
+                                    document.getElementById('resultats').style.display = 'flex';
+                                }
                             }, 500);
                         }
                         /*}*/
                     }
                 }
-        });
+            });
+        }
     }
 }
 
-//alert(document.getElementById('carte1').style.backgroundImage);
-//}
 
-function choixAleaCarte(num) {
-    for (let i = 0; i < num; i++) {
-        let pioche = Math.floor(Math.random() * cartes.length);
-        let dejapioche = 0;
-        for (let a = 0; a < cartes_tirees.length; a++) {
-            dejapioche = 0;
-            if (cartes_tirees !== 'undefined' && cartes[pioche] === cartes_tirees[a]) {
-                dejapioche = 1
-            }
-        }
-        if (dejapioche === 0) {
-            cartes_tirees.push(cartes[pioche]);
-            cartes_tirees.push(cartes[pioche]);
-        }
-    }
-    shuffleArray(cartes_tirees);
-}
+document.getElementById('resval').addEventListener('click', function () {
+    document.getElementById('resultats').style.display = 'none';
+    document.getElementById('cartes').style.display = 'none';
+    document.getElementById('entree').style.display = 'flex';
+    tours = 0;
+    pairs = 0;
+    nbClick = 0;
+    div1 = null;
+    div2 = null;
+    carte1 = '';
+    carte2 = '';
+    carteId1 = null;
+    carteId2 = null;
+});
+document.getElementById('btnJouer').addEventListener('click', function () {
+    document.getElementById('resultats').style.display = 'none';
+    document.getElementById('entree').style.display = 'none';
+    document.getElementById('cartes').style.display = 'flex';
+    tours = 0;
+    pairs = 0;
+    nbClick = 0;
+    div1 = null;
+    div2 = null;
+    carte1 = '';
+    carte2 = '';
+    carteId1 = null;
+    carteId2 = null;
+    jouer();
+});
+/*
+function turnCSS(elem, src) {
+    $(elem)
+        .addClass("flipping")
+        .bind("transitionend webkittransitionend", function () { //should add more prefixes
+            this.src = src;
+            $(this)
+                .unbind("transitionend webkittransitionend")
+                .removeClass("flipping")
+        })
+}*/
