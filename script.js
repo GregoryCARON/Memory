@@ -63,6 +63,16 @@ catch (e) {
     console.log('pc');
 }
 
+var images = new Array();
+function preload() {
+    for (var i = 0; i < cartes.length; i++) {
+        images[i] = new Image();
+        images[i].src = 'https://gregoryc.000webhostapp.com/Memory/images/' + cartes[i] + '.png';
+    }
+}
+
+preload();
+
 function choixAleaCarte(number) {
     for (var i = 0; i < number; i++) {
         var pioche = Math.floor(Math.random() * cartes.length);
@@ -204,6 +214,8 @@ function ras() {
     document.getElementById('resultats').style.display = 'none';
     document.getElementById('entree').style.display = 'none';
     document.getElementById('cartes').style.display = 'none';
+    cartes_tirees = [];
+    carteTotales = 0;
     tours = 0;
     pairs = 0;
     nbClick = 0;
