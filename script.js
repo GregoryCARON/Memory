@@ -1,5 +1,5 @@
 //VARIABLES DECLARATIONS
-var carteTotales, tours = 0, pairs = 0, nbClick = 0, div1, div2, carte1 = '', carte2 = '', carteId1, carteId2, num = 54;
+var carteTotales, tours = 0, pairs = 0, nbClick = 0, div1, div2, carte1 = '', carte2 = '', carteId1, carteId2, num = 12;
 var cartes = [
     'ace_of_spades2',
     'king_of_spades2',
@@ -111,6 +111,8 @@ function jouer() {
             document.getElementById('cartes').appendChild(divContenu);
             (function (ii) {
                 document.getElementById('carte' + ii).addEventListener('click', function () {
+                    document.getElementById('carte' + ii).classList.add('animated');
+                    document.getElementById('carte' + ii).classList.add('flipInY');
                     if (nbClick < 2) {
                         console.log(ii);
                         if (nbClick === 0) {
@@ -120,6 +122,8 @@ function jouer() {
                             carteId1 = 'img' + ii;
                             console.log('images/cartes/' + cartes_tirees[ii] + '.png');
                             document.getElementById(carteId1).src = 'images/cartes/' + cartes_tirees[ii] + '.png';
+                            document.getElementById('carte' + ii).classList.remove('animated');
+                            document.getElementById('carte' + ii).classList.remove('flipInY');
                         } else {
                             console.log(tours);
                             tours++;
@@ -154,6 +158,11 @@ function jouer() {
                                     carteId2 = null;
                                     pairs++;
                                     document.getElementById('score').innerHTML = 'Pairs : ' + pairs;
+                                    if ((num) === (pairs * 2)) {
+                                        document.getElementById('entree').style.display = 'none';
+                                        document.getElementById('cartes').style.display = 'none';
+                                        document.getElementById('resultats').style.display = 'flex';
+                                    }
                                 }, 500);
                             } else {
                                 setTimeout(function () {
@@ -162,16 +171,14 @@ function jouer() {
                                     document.getElementById(carteId2).src = 'images/dos.png';
                                     carteId1 = null;
                                     carteId2 = null;
-                                    if ((num) === (pairs * 2)) {
-                                        document.getElementById('entree').style.display = 'none';
-                                        document.getElementById('cartes').style.display = 'none';
-                                        document.getElementById('resultats').style.display = 'flex';
-                                    }
+
                                 }, 500);
                             }
                             /*}*/
                         }
                     }
+                    document.getElementById('carte' + ii).classList.remove('animated');
+                    document.getElementById('carte' + ii).classList.remove('flipInY');
                 });
             })(ii);
         }

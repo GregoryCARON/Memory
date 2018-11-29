@@ -11,7 +11,7 @@ h1 {
 }
 .contenu {
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
     margin-bottom: 20px;
     flex: 1 50%;
     flex-wrap: wrap;
@@ -44,4 +44,13 @@ button {
 }
 img {
     height: 100%;
+}
+.animation {
+    -webkit-animation-name: LefttoRight;
+    -webkit-animation-duration: 1s;
+    -webkit-animation-fill-mode: forwards;
+}
+@-webkit-keyframes LefttoRight {
+    0%   { left: -999em;}
+    100% { left: 0px;}
 }
