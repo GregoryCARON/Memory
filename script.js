@@ -1,5 +1,5 @@
 //VARIABLES DECLARATIONS
-var carteTotales, tours = 0, pairs = 0, nbClick = 0, div1, div2, carte1 = '', carte2 = '', carteId1, carteId2, num = 12;
+var carteTotales, tours = 0, pairs = 0, nbClick = 0, div1, div2, carte1 = '', carte2 = '', carteId1, carteId2, tmpTimer, num = 12;
 var cartes = [
     'ace_of_spades2',
     'king_of_spades2',
@@ -56,19 +56,50 @@ var cartes = [
     '2_of_clubs'
 ];
 var cartes_tirees = [];
-try{
+try {
     document.body.requestFullscreen();
-}
-catch (e) {
+} catch (e) {
     console.log('pc');
 }
 
 var images = new Array();
+
 function preload() {
     for (var i = 0; i < cartes.length; i++) {
         images[i] = new Image();
-        images[i].src = 'https://gregoryc.000webhostapp.com/Memory/images/' + cartes[i] + '.png';
+        images[i].src = 'images/' + cartes[i] + '.png';
     }
+}
+
+function animElement(id) {
+    var cssPrefix = false;
+    switch(Browser.name) {
+        case "safari":
+            cssPrefix = "webkit";
+            break;
+        case "chrome":
+            cssPrefix = "webkit";
+            break;
+        case "firefox":
+            cssPrefix = "moz";
+            break;
+        case "opera":
+            cssPrefix = "o";
+            break;
+        case "ie":
+            cssPrefix = "ms";
+            break;
+    }
+    animElement('titre');
+    // Spin them rays!
+    if(cssPrefix) { // Skip IE!
+        var rays = document.getElementById(id), degrees = 0, speed = 0.05;
+        setInterval(function() {
+            degrees += speed; // degree adjustment each interval
+            rays.setAttribute("style","-" + cssPrefix + "-transform:rotate(" + degrees + "deg)");
+        },20);
+    }
+
 }
 
 preload();
@@ -101,9 +132,8 @@ function shuffleArray(array) {
     }
 }
 
-
 function jouer() {
-
+    document.getElementById('reset').style.display = 'block';
     shuffleArray(cartes);
     if (num > 54) {//MAX NUMBER OF CARDS
         num = 54;
@@ -121,8 +151,7 @@ function jouer() {
             document.getElementById('cartes').appendChild(divContenu);
             (function (ii) {
                 document.getElementById('carte' + ii).addEventListener('click', function () {
-                    document.getElementById('carte' + ii).classList.add('animated');
-                    document.getElementById('carte' + ii).classList.add('flipInY');
+
                     if (nbClick < 2) {
                         console.log(ii);
                         if (nbClick === 0) {
@@ -131,6 +160,8 @@ function jouer() {
                             carte1 = cartes_tirees[ii];
                             carteId1 = 'img' + ii;
                             console.log('images/cartes/' + cartes_tirees[ii] + '.png');
+                            document.getElementById('carte' + ii).classList.add('animated');
+                            document.getElementById('carte' + ii).classList.add('flipInY');
                             document.getElementById(carteId1).src = 'images/cartes/' + cartes_tirees[ii] + '.png';
                             document.getElementById('carte' + ii).classList.remove('animated');
                             document.getElementById('carte' + ii).classList.remove('flipInY');
@@ -141,7 +172,12 @@ function jouer() {
                             div2 = 'carte' + ii;
                             carte2 = cartes_tirees[ii];
                             carteId2 = 'img' + ii;
+                            document.getElementById('carte' + ii).classList.add('animated');
+                            document.getElementById('carte' + ii).classList.add('flipInY');
                             document.getElementById(carteId2).src = 'images/cartes/' + cartes_tirees[ii] + '.png';
+                            tmpTimer = setTimeout(function() {clearTimeout(tmpTimer);}, 1000);
+                            document.getElementById('carte' + ii).classList.remove('animated');
+                            document.getElementById('carte' + ii).classList.remove('flipInY');
                             /*try {
                                 document.getElementById(carteId2).src = 'images/cartes/' + cartes_tirees[ii] + '.png';
                             } catch (e) {
@@ -205,15 +241,17 @@ document.getElementById('btnJouer').addEventListener('click', function () {
     document.getElementById('reset').style.visibility = 'visible';
     document.getElementById('cartes').style.display = 'flex';
 });
-document.getElementById('reset').addEventListener('click', function() {
+document.getElementById('reset').addEventListener('click', function () {
     document.getElementById('cartes').style.display = 'flex';
     ras();
 });
+
 function ras() {
     document.getElementById('cartes').innerHTML = '';
     document.getElementById('resultats').style.display = 'none';
     document.getElementById('entree').style.display = 'none';
     document.getElementById('cartes').style.display = 'none';
+    document.getElementById('reset').style.display = 'none';
     cartes_tirees = [];
     carteTotales = 0;
     tours = 0;
