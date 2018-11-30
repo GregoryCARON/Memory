@@ -22,12 +22,17 @@ h1 {
 }
 #resultats {
     display: none;
+    line-height: 66px;
+    height: 40px;
 }
 #reset {
     visibility: hidden;
 }
 #cartes {
     display: none;
+}
+.m {
+    margin-top: 20px;
 }
 button {
     min-width: 70px;

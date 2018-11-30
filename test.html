@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head lang="fr">
+    <meta charset="UTF-8">
+    <title>Tests Unitaires Jasmine</title>
+
+    <link rel="stylesheet" href="lib/jasmine-3.3.0/jasmine.css">
+
+    <script src="lib/jasmine-3.3.0/jasmine.js"></script>
+    <script src="lib/jasmine-3.3.0/jasmine-html.js"></script>
+    <script src="lib/jasmine-3.3.0/boot.js"></script>
+
+    <!-- Fichiers sources -->
+
+    <script src="script.js" type="module"></script>
+
+    <!-- Fichiers Spec -->
+
+    <script type="module" src="test.js"></script>
+
+    </head>
+<body>
+<h1 id="titre">Memory</h1>
+<div class="contenu" id="entree">
+    <button id="btnJouer">Jouer</button>
+</div>
+<div class="contenu" id="cartes"></div>
+<div class="contenu" id="resultats">
+    <button id="resval">Rejouer</button>
+</div>
+<div class="contenu m">
+    <div id="score">Pair : 0</div>
+    <button id="reset">Reset</button>
+</div>
+</body>
+</html>

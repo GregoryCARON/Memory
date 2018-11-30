@@ -1,5 +1,6 @@
 //VARIABLES DECLARATIONS
-var carteTotales, tours = 0, pairs = 0, nbClick = 0, div1, div2, carte1 = '', carte2 = '', carteId1, carteId2, tmpTimer, num = 12;
+var carteTotales, tours = 0, pairs = 0, nbClick = 0, div1, div2, carte1 = '', carte2 = '', carteId1, carteId2, tmpTimer,
+    num = 12;
 var cartes = [
     'ace_of_spades2',
     'king_of_spades2',
@@ -56,7 +57,7 @@ var cartes = [
     '2_of_clubs'
 ];
 var cartes_tirees = [];
-try {
+try {//TRY ENABLE MOBILE FULLSCREEN
     document.body.requestFullscreen();
 } catch (e) {
     console.log('pc');
@@ -64,47 +65,28 @@ try {
 
 var images = new Array();
 
-function preload() {
+function cl(any) {
+    console.log(any);
+}
+
+function estPluriel(word, quantity) {//PLURAL VERIFICATION FOR 'S' ADDING
+    if (quantity > 1) {
+        return word + 's';
+    } else {
+        return word;
+    }
+}
+
+function preload() {//PRELOAD IMAGES
     for (var i = 0; i < cartes.length; i++) {
         images[i] = new Image();
         images[i].src = 'images/' + cartes[i] + '.png';
     }
 }
 
-function animElement(id) {
-    var cssPrefix = false;
-    switch(Browser.name) {
-        case "safari":
-            cssPrefix = "webkit";
-            break;
-        case "chrome":
-            cssPrefix = "webkit";
-            break;
-        case "firefox":
-            cssPrefix = "moz";
-            break;
-        case "opera":
-            cssPrefix = "o";
-            break;
-        case "ie":
-            cssPrefix = "ms";
-            break;
-    }
-    animElement('titre');
-    // Spin them rays!
-    if(cssPrefix) { // Skip IE!
-        var rays = document.getElementById(id), degrees = 0, speed = 0.05;
-        setInterval(function() {
-            degrees += speed; // degree adjustment each interval
-            rays.setAttribute("style","-" + cssPrefix + "-transform:rotate(" + degrees + "deg)");
-        },20);
-    }
-
-}
-
 preload();
 
-function choixAleaCarte(number) {
+function choixAleaCarte(number) {//RANDOM CHOICE CARD AND DUPLICATE VERIFICATION
     for (var i = 0; i < number; i++) {
         var pioche = Math.floor(Math.random() * cartes.length);
         var dejapioche = 0;
@@ -123,7 +105,7 @@ function choixAleaCarte(number) {
 }
 
 //MIX ARRAY FUNCTION
-function shuffleArray(array) {
+function shuffleArray(array) {//MIX ARRAY
     for (var i = array.length - 1; i > 0; i--) {
         var j = Math.floor(Math.random() * (i + 1));
         var temp = array[i];
@@ -132,7 +114,7 @@ function shuffleArray(array) {
     }
 }
 
-function jouer() {
+function jouer() {//GAME FUNCTION
     document.getElementById('reset').style.display = 'block';
     shuffleArray(cartes);
     if (num > 54) {//MAX NUMBER OF CARDS
@@ -160,11 +142,14 @@ function jouer() {
                             carte1 = cartes_tirees[ii];
                             carteId1 = 'img' + ii;
                             console.log('images/cartes/' + cartes_tirees[ii] + '.png');
-                            document.getElementById('carte' + ii).classList.add('animated');
-                            document.getElementById('carte' + ii).classList.add('flipInY');
+                            document.getElementById('img' + ii).classList.add('animated');
+                            document.getElementById('img' + ii).classList.add('flipInY');
+                            document.getElementById('img' + ii).classList.add('faster');
+                            setTimeout(console.log(''), 1000);
                             document.getElementById(carteId1).src = 'images/cartes/' + cartes_tirees[ii] + '.png';
-                            document.getElementById('carte' + ii).classList.remove('animated');
-                            document.getElementById('carte' + ii).classList.remove('flipInY');
+                            document.getElementById('img' + ii).classList.remove('animated');
+                            document.getElementById('img' + ii).classList.remove('flipInY');
+                            document.getElementById('img' + ii).classList.remove('faster');
                         } else {
                             console.log(tours);
                             tours++;
@@ -172,12 +157,16 @@ function jouer() {
                             div2 = 'carte' + ii;
                             carte2 = cartes_tirees[ii];
                             carteId2 = 'img' + ii;
-                            document.getElementById('carte' + ii).classList.add('animated');
-                            document.getElementById('carte' + ii).classList.add('flipInY');
+                            document.getElementById('img' + ii).classList.add('animated');
+                            document.getElementById('img' + ii).classList.add('flipInY');
+                            document.getElementById('img' + ii).classList.add('faster');
                             document.getElementById(carteId2).src = 'images/cartes/' + cartes_tirees[ii] + '.png';
-                            tmpTimer = setTimeout(function() {clearTimeout(tmpTimer);}, 1000);
-                            document.getElementById('carte' + ii).classList.remove('animated');
-                            document.getElementById('carte' + ii).classList.remove('flipInY');
+                            tmpTimer = setTimeout(function () {
+                                clearTimeout(tmpTimer);
+                            }, 1000);
+                            document.getElementById('img' + ii).classList.remove('animated');
+                            document.getElementById('img' + ii).classList.remove('flipInY');
+                            document.getElementById('img' + ii).classList.remove('faster');
                             /*try {
                                 document.getElementById(carteId2).src = 'images/cartes/' + cartes_tirees[ii] + '.png';
                             } catch (e) {
@@ -203,11 +192,13 @@ function jouer() {
                                     carte2 = null;
                                     carteId2 = null;
                                     pairs++;
-                                    document.getElementById('score').innerHTML = 'Pairs : ' + pairs;
+                                    document.getElementById('score').innerHTML = estPluriel('Pair', pairs) + ' : ' + pairs;
                                     if ((num) === (pairs * 2)) {
                                         document.getElementById('entree').style.display = 'none';
                                         document.getElementById('cartes').style.display = 'none';
+                                        document.getElementById('reset').style.display = 'none';
                                         document.getElementById('resultats').style.display = 'flex';
+                                        document.getElementById('sresult').innerHTML = 'Vous avez trouvé ' + pairs + ' ' + estPluriel('pair', pairs) + ' en ' + tours + ' tours';
                                     }
                                 }, 500);
                             } else {
@@ -231,23 +222,30 @@ function jouer() {
     }
 }
 
-document.getElementById('resval').addEventListener('click', function () {
-    ras();
-    document.getElementById('reset').style.visibility = 'hidden';
-    document.getElementById('entree').style.display = 'flex';
-});
-document.getElementById('btnJouer').addEventListener('click', function () {
-    ras();
-    document.getElementById('reset').style.visibility = 'visible';
-    document.getElementById('cartes').style.display = 'flex';
-});
-document.getElementById('reset').addEventListener('click', function () {
-    document.getElementById('cartes').style.display = 'flex';
-    ras();
-});
+function aEL() {
+    document.getElementById('resval').addEventListener('click', function () {//PLAY AGAIN BUTTON
+        ras();
+        document.getElementById('reset').style.visibility = 'hidden';
+        document.getElementById('entree').style.display = 'flex';
+    });
+    document.getElementById('btnJouer').addEventListener('click', function () {//PLAY BUTTON
+        ras();
+        document.getElementById('reset').style.visibility = 'visible';
+        document.getElementById('cartes').style.display = 'flex';
+    });
+    document.getElementById('reset').addEventListener('click', function () {//RESET BUTTON
+        ras();
+        document.getElementById('cartes').style.display = 'flex';
+        document.getElementById('reset').style.visibility = 'hidden';
+    });
+}
 
-function ras() {
+aEL();
+
+
+function ras() {//RESET FUNCTION
     document.getElementById('cartes').innerHTML = '';
+    document.getElementById('score').innerHTML = estPluriel('Pair', 0) + ' : 0';
     document.getElementById('resultats').style.display = 'none';
     document.getElementById('entree').style.display = 'none';
     document.getElementById('cartes').style.display = 'none';
@@ -265,3 +263,5 @@ function ras() {
     carteId2 = null;
     jouer();
 }
+
+//export { estPluriel }
