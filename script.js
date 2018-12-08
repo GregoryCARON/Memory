@@ -67,12 +67,91 @@ var cartes = [
     '3_of_clubs',
     '2_of_clubs'
 ];
+
+(function() {
+    var
+        fullScreenApi = {
+            supportsFullScreen: false,
+            isFullScreen: function() { return false; },
+            requestFullScreen: function() {},
+            cancelFullScreen: function() {},
+            fullScreenEventName: '',
+            prefix: ''
+        },
+        browserPrefixes = 'webkit moz o ms khtml'.split(' ');
+
+    // check for native support
+    if (typeof document.cancelFullScreen != 'undefined') {
+        fullScreenApi.supportsFullScreen = true;
+    } else {
+        // check for fullscreen support by vendor prefix
+        for (var i = 0, il = browserPrefixes.length; i < il; i++ ) {
+            fullScreenApi.prefix = browserPrefixes[i];
+
+            if (typeof document[fullScreenApi.prefix + 'CancelFullScreen' ] != 'undefined' ) {
+                fullScreenApi.supportsFullScreen = true;
+
+                break;
+            }
+        }
+    }
+
+    // update methods to do something useful
+    if (fullScreenApi.supportsFullScreen) {
+        fullScreenApi.fullScreenEventName = fullScreenApi.prefix + 'fullscreenchange';
+
+        fullScreenApi.isFullScreen = function() {
+            switch (this.prefix) {
+                case '':
+                    return document.fullScreen;
+                case 'webkit':
+                    return document.webkitIsFullScreen;
+                default:
+                    return document[this.prefix + 'FullScreen'];
+            }
+        }
+        fullScreenApi.requestFullScreen = function(el) {
+            return (this.prefix === '') ? el.requestFullScreen() : el[this.prefix + 'RequestFullScreen']();
+        }
+        fullScreenApi.cancelFullScreen = function(el) {
+            return (this.prefix === '') ? document.cancelFullScreen() : document[this.prefix + 'CancelFullScreen']();
+        }
+    }
+
+    // jQuery plugin
+    if (typeof jQuery != 'undefined') {
+        jQuery.fn.requestFullScreen = function() {
+
+            return this.each(function() {
+                if (fullScreenApi.supportsFullScreen) {
+                    fullScreenApi.requestFullScreen(this);
+                }
+            });
+        };
+    }
+
+    // export api
+    window.fullScreenApi = fullScreenApi;
+})();
+
 var cartes_tirees = [];
-try {//TRY ENABLE MOBILE FULLSCREEN
-    document.body.requestFullscreen();
+/*try {//TRY ENABLE MOBILE FULLSCREEN
+
+    document.getElementById('cartes').requestFullScreen();
+    document.cancelFullScreen();
+
+// Webkit (works in Safari and Chrome Canary)
+    document.getElementById('cartes').webkitRequestFullScreen();
+    document.webkitCancelFullScreen();
+
+// Firefox (works in nightly)
+    document.getElementById('cartes').mozRequestFullScreen();
+    document.mozCancelFullScreen();
+
+    //document.body.requestFullscreen();
 } catch (e) {
     console.log('pc');
-}
+}*/
 
 var images = new Array();
 
@@ -114,6 +193,15 @@ function choixAleaCarte(number) {//RANDOM CHOICE CARD AND DUPLICATE VERIFICATION
     }
     shuffleArray(cartes_tirees);
 }
+function DisplayDetection() {//LANDSCAPE/PORTRAIT MODE DETECTION
+    if (window.innerHeight < window.innerWidth) {
+        return 'paysage';
+    } else {
+        return 'portrait';
+    }
+}
+innerHeight < innerWidth
+
 
 //MIX ARRAY FUNCTION
 function shuffleArray(array) {//MIX ARRAY
@@ -237,6 +325,9 @@ function jouer() {//GAME FUNCTION
 
 function aEL() {
     document.getElementById('resval').addEventListener('click', function () {//PLAY AGAIN BUTTON
+        if (fullScreenApi.supportsFullScreen) {
+                fullScreenApi.requestFullScreen(document);
+        }
         ras();
         document.getElementById('reset').style.visibility = 'hidden';
         document.getElementById('entree').style.display = 'flex';
